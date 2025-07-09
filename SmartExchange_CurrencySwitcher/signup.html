@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Up - SmartExchange</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="container" role="main" aria-labelledby="signup-title">
+    <h1 id="signup-title">Create Your SmartExchange Account</h1>
+    <form id="signup-form" onsubmit="signup(event)" novalidate>
+      <label for="signup-email">Email address</label><br>
+      <input type="email" id="signup-email" name="signup-email" placeholder="Email" required aria-required="true" /><br>
+      <label for="signup-password">Password</label><br>
+      <input type="password" id="signup-password" name="signup-password" placeholder="Password" required aria-required="true" /><br>
+      <label for="signup-confirm-password">Confirm Password</label><br>
+      <input type="password" id="signup-confirm-password" name="signup-confirm-password" placeholder="Confirm Password" required aria-required="true" /><br>
+
+      <label for="signup-country">Country</label><br>
+      <input type="text" id="signup-country" name="signup-country" placeholder="Enter your country" required aria-required="true" /><br><br>
+      <p id="currency-display" style="font-weight: bold; margin-bottom: 10px;"></p>
+      <p></p><br>
+
+      <button type="submit" onclick="window.location.href='dashboard.html'">Sign Up</button>
+    </form>
+    <p id="signup-error" role="alert" style="color: red;"></p>
+    <p>Already have an account? <a href="login.html">Login here</a></p>
+  </main>
+  <script>
+    const countryToCurrencyMap = {
+      "United States": "USD",
+      "United Kingdom": "GBP",
+      "Japan": "JPY",
+      "Australia": "AUD",
+      "Canada": "CAD",
+      "Switzerland": "CHF",
+      "China": "CNY",
+      "India": "INR",
+      "New Zealand": "NZD",
+      "Poland": "PLN",
+      "Mexico": "MXN",
+      "Sweden": "SEK",
+      "Norway": "NOK",
+      "Israel": "ILS",
+      "South Africa": "ZAR",
+      "Singapore": "SGD",
+      "Bangladesh": "BDT",
+      "Bhutan": "BTN",
+      "Brunei": "BND",
+      "Cambodia": "KHR",
+      "Indonesia": "IDR",
+      "Laos": "LAK",
+      "Malaysia": "MYR",
+      "Maldives": "MVR",
+      "Mongolia": "MNT",
+      "Myanmar": "MMK",
+      "Nepal": "NPR",
+      "Philippines": "PHP",
+      "Russia": "RUB",
+      "South Korea": "KRW",
+      "Sri Lanka": "LKR",
+      "Taiwan": "TWD",
+      "Thailand": "THB",
+      "Vietnam": "VND",
+      "Fiji": "FJD",
+      "Samoa": "WST",
+      "Solomon Islands": "SBD",
+      "Tonga": "TOP",
+      "Vanuatu": "VUV",
+      "Albania": "ALL",
+      "Belarus": "BYN",
+      "Bosnia and Herzegovina": "BAM",
+      "Bulgaria": "BGN",
+      "Croatia": "HRK",
+      "Denmark": "DKK",
+      "Hungary": "HUF",
+      "Iceland": "ISK",
+      "Moldova": "MDL",
+      "North Macedonia": "MKD",
+      "Romania": "RON",
+      "Serbia": "RSD",
+      "Ukraine": "UAH",
+      "Algeria": "DZD",
+      "Afghanistan": "AFN",
+      "Armenia": "AMD",
+      "Azerbaijan": "AZN",
+      "Bahrain": "BHD",
+      "Egypt": "EGP",
+      "Georgia": "GEL",
+      "Iran": "IRR",
+      "Iraq": "IQD",
+      "Jordan": "JOD",
+      "Kazakhstan": "KZT",
+      "Kyrgyzstan": "KGS",
+      "Kuwait": "KWD",
+      "Lebanon": "LBP",
+      "Morocco": "MAD",
+      "Oman": "OMR",
+      "Pakistan": "PKR",
+      "Qatar": "QAR",
+      "Saudi Arabia": "SAR",
+      "Syria": "SYP",
+      "Tajikistan": "TJS",
+      "Tunisia": "TND",
+      "Turkey": "TRY",
+      "Turkmenistan": "TMM",
+      "United Arab Emirates": "AED",
+      "Uzbekistan": "UZS",
+      "Yemen": "YER",
+      "Belize": "BZD",
+      "Costa Rica": "CRC",
+      "Guatemala": "GTQ",
+      "Honduras": "HNL",
+      "Bahamas": "BSD",
+      "Barbados": "BBD",
+      "Bermuda": "BMD",
+      "Cayman Islands": "KYD",
+      "Cuba": "CUP",
+      "Dominica": "DOP",
+      "Trinidad and Tobago": "TTD",
+      "Argentina": "ARS",
+      "Bolivia": "BOB",
+      "Brazil": "BRL",
+      "Chile": "CLP",
+      "Colombia": "COP",
+      "Falkland Islands": "FKP",
+      "Guyana": "GYD",
+      "Paraguay": "PYG",
+      "Peru": "PEN",
+      "Suriname": "SRD",
+      "Uruguay": "UYU",
+      "Venezuela": "VES"
+    };
+
+    document.getElementById('signup-country').addEventListener('input', function() {
+      const country = this.value.trim();
+      const currency = countryToCurrencyMap[country];
+      const currencyDisplay = document.getElementById('currency-display');
+      if (currency) {
+        currencyDisplay.textContent = `Currency: ${currency}`;
+        localStorage.setItem("baseCurrency", currency);
+      } else {
+        currencyDisplay.textContent = '';
+        localStorage.removeItem("baseCurrency");
+      }
+    });
+
+    function signup(event) {
+      event.preventDefault();
+      const email = document.getElementById("signup-email").value.trim();
+      const password = document.getElementById("signup-password").value;
+      const confirmPassword = document.getElementById("signup-confirm-password").value;
+      const errorElem = document.getElementById("signup-error");
+      const baseCurrency = document.getElementById("signup-base-currency").value;
+
+      errorElem.style.color = "red";
+      errorElem.textContent = "";
+
+      if (!email) {
+        errorElem.textContent = "Email is required.";
+        return;
+      }
+      if (!password) {
+        errorElem.textContent = "Password is required.";
+        return;
+      }
+      if (password !== confirmPassword) {
+        errorElem.textContent = "Passwords do not match.";
+        return;
+      }
+      if (baseCurrency === "none") {
+        errorElem.textContent = "Please select a base currency.";
+        return;
+      }
+
+      // Retrieve existing users from localStorage or initialize empty object
+      let users = JSON.parse(localStorage.getItem("users")) || {};
+
+      if (users[email]) {
+        errorElem.textContent = "An account with this email already exists.";
+        return;
+      }
+
+      // Save new user credentials
+      users[email] = { password: password, baseCurrency: baseCurrency };
+      localStorage.setItem("users", JSON.stringify(users));
+
+      // Create new account data for the new user with mainBalance and transactions
+      let accounts = JSON.parse(localStorage.getItem("accounts")) || {};
+      if (!accounts[email]) {
+        accounts[email] = {
+          mainBalance: 0,
+          transactions: []
+        };
+        localStorage.setItem("accounts", JSON.stringify(accounts));
+      }
+
+      localStorage.setItem("userLoggedIn", "true");
+      localStorage.setItem("baseCurrency", baseCurrency);
+
+      // Set currentUserEmail in localStorage for dashboard to load user data
+      localStorage.setItem("currentUserEmail", email);
+      errorElem.style.color = "green";
+      errorElem.textContent = "Signup successful! Redirecting to the Dashboard... Kindly hold on.... You are being redirected.....";
+      setTimeout(() => {
+        // Redirect directly to dashboard after signup
+        window.location.href = "dashboard.html";
+      }, 1500);
+    }
+  </script>
+</body>
+</html>

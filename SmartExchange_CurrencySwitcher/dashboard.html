@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard - SmartExchange</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body onload="checkAuth(); getUserLocationAndCurrency(); updateBalanceDisplay(); loadTransactions();">
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <!-- Logo placeholder -->
+      <div class="logo-placeholder">Logo</div>
+    </div>
+    <div class="top-bar-right">
+      <button id="settings-btn" title="Settings">Settings</button>
+      <button id="profile-btn" title="Profile">Profile</button>
+      <button id="theme-toggle-btn" title="Toggle Dark/Light Mode" onclick="toggleTheme()">Dark Mode</button>
+    </div>
+  </div>
+  <div class="container">
+    <h1>Welcome to SmartExchange</h1>
+    <p>Your balance in base currency : <strong id="main-balance"></strong></p>
+
+    <p>Your balance in local currency:</p>
+    <button id="toggle-local-balance-btn" onclick="toggleLocalBalance()">Hide Local Currency Balance</button>
+    <h2 id="local-balance">Loading...</h2>
+    
+    <h3>Transaction History</h3>
+    <button id="toggle-transactions-btn" onclick="toggleTransactionHistory()">Hide Transaction History</button>
+    <div id="transaction-container">
+      <table id="transaction-table" border="1" cellpadding="5" cellspacing="0">
+        <tr><th>Date</th><th>Description</th><th>Amount (Base / Local)</th></tr>
+        <tr id="no-transactions"><td colspan="3">No transactions have been done!</td></tr>
+      </table>
+    </div>
+    <br>
+    <button onclick="logout()">Logout</button>
+    <br><br>
+    <button onclick="window.location.href='deposit.html'">Go to Deposit Page</button>
+    <br><br>
+    <div class="payment-links-container">
+      <button onclick="window.location.href='payment_methods.html'">Go to Payment Methods</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+    function checkAuth() {
+      if (localStorage.getItem("userLoggedIn") !== "true") {
+        window.location.href = "login.html";
+      }
+    }
+
+    function logout() {
+      localStorage.removeItem("userLoggedIn");
+      window.location.href = "login.html";
+    }
+  </script>
+</body>
+</html>

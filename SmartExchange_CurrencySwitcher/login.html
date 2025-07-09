@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - SmartBank</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>SmartExchange Login</h1>
+<form onsubmit="login(event)">
+      <input type="email" id="email" placeholder="Email" required><br>
+      <input type="password" id="password" placeholder="Password" required><br>
+
+      <label for="login-country">Country</label><br>
+    <input type="text" id="login-country" name="login-country" placeholder="Enter your country" required aria-required="true" /><br><br>
+    <p id="currency-display" style="font-weight: bold; margin-bottom: 10px;"></p>
+      <p></p><br>
+      <button type="submit">Login</button>
+    </form>
+    <p id="login-error" style="color: red;"></p>
+     <p>Dont have an account? <a href="signup.html">Signup here</a></p>
+  </div>
+    <script>
+    const countryToCurrencyMap = {
+      "United States": "USD",
+      "United Kingdom": "GBP",
+      "Japan": "JPY",
+      "Australia": "AUD",
+      "Canada": "CAD",
+      "Switzerland": "CHF",
+      "China": "CNY",
+      "India": "INR",
+      "New Zealand": "NZD",
+      "Poland": "PLN",
+      "Mexico": "MXN",
+      "Sweden": "SEK",
+      "Norway": "NOK",
+      "Israel": "ILS",
+      "South Africa": "ZAR",
+      "Singapore": "SGD",
+      "Bangladesh": "BDT",
+      "Bhutan": "BTN",
+      "Brunei": "BND",
+      "Cambodia": "KHR",
+      "Indonesia": "IDR",
+      "Laos": "LAK",
+      "Malaysia": "MYR",
+      "Maldives": "MVR",
+      "Mongolia": "MNT",
+      "Myanmar": "MMK",
+      "Nepal": "NPR",
+      "Philippines": "PHP",
+      "Russia": "RUB",
+      "South Korea": "KRW",
+      "Sri Lanka": "LKR",
+      "Taiwan": "TWD",
+      "Thailand": "THB",
+      "Vietnam": "VND",
+      "Fiji": "FJD",
+      "Samoa": "WST",
+      "Solomon Islands": "SBD",
+      "Tonga": "TOP",
+      "Vanuatu": "VUV",
+      "Albania": "ALL",
+      "Belarus": "BYN",
+      "Bosnia and Herzegovina": "BAM",
+      "Bulgaria": "BGN",
+      "Croatia": "HRK",
+      "Denmark": "DKK",
+      "Hungary": "HUF",
+      "Iceland": "ISK",
+      "Moldova": "MDL",
+      "North Macedonia": "MKD",
+      "Romania": "RON",
+      "Serbia": "RSD",
+      "Ukraine": "UAH",
+      "Algeria": "DZD",
+      "Afghanistan": "AFN",
+      "Armenia": "AMD",
+      "Azerbaijan": "AZN",
+      "Bahrain": "BHD",
+      "Egypt": "EGP",
+      "Georgia": "GEL",
+      "Iran": "IRR",
+      "Iraq": "IQD",
+      "Jordan": "JOD",
+      "Kazakhstan": "KZT",
+      "Kyrgyzstan": "KGS",
+      "Kuwait": "KWD",
+      "Lebanon": "LBP",
+      "Morocco": "MAD",
+      "Oman": "OMR",
+      "Pakistan": "PKR",
+      "Qatar": "QAR",
+      "Saudi Arabia": "SAR",
+      "Syria": "SYP",
+      "Tajikistan": "TJS",
+      "Tunisia": "TND",
+      "Turkey": "TRY",
+      "Turkmenistan": "TMM",
+      "United Arab Emirates": "AED",
+      "Uzbekistan": "UZS",
+      "Yemen": "YER",
+      "Belize": "BZD",
+      "Costa Rica": "CRC",
+      "Guatemala": "GTQ",
+      "Honduras": "HNL",
+      "Bahamas": "BSD",
+      "Barbados": "BBD",
+      "Bermuda": "BMD",
+      "Cayman Islands": "KYD",
+      "Cuba": "CUP",
+      "Dominica": "DOP",
+      "Trinidad and Tobago": "TTD",
+      "Argentina": "ARS",
+      "Bolivia": "BOB",
+      "Brazil": "BRL",
+      "Chile": "CLP",
+      "Colombia": "COP",
+      "Falkland Islands": "FKP",
+      "Guyana": "GYD",
+      "Paraguay": "PYG",
+      "Peru": "PEN",
+      "Suriname": "SRD",
+      "Uruguay": "UYU",
+      "Venezuela": "VES"
+    };
+    
+    document.getElementById('login-country').addEventListener('input', function() {
+      const country = this.value.trim();
+      const currency = countryToCurrencyMap[country];
+      const currencyDisplay = document.getElementById('currency-display');
+      if (currency) {
+        currencyDisplay.textContent = `Currency: ${currency}`;
+        localStorage.setItem("baseCurrency", currency);
+      } else {
+        currencyDisplay.textContent = '';
+        localStorage.removeItem("baseCurrency");
+      }
+    });
+    
+    function login(event) {
+      event.preventDefault();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+      const errorElem = document.getElementById("login-error");
+
+      errorElem.style.color = "red";
+      errorElem.textContent = "";
+
+      if (!email) {
+        errorElem.textContent = "Email is required.";
+        return;
+      }
+      if (!password) {
+        errorElem.textContent = "Password is required.";
+        return;
+      }
+
+      // Retrieve users from localStorage
+      let users = JSON.parse(localStorage.getItem("users")) || {};
+
+      if (!users[email]) {
+        errorElem.textContent = "No account found with this email.";
+        return;
+      }
+
+      if (users[email].password !== password) {
+        errorElem.textContent = "Incorrect password.";
+        return;
+      }
+
+      // Successful login
+      localStorage.setItem("userLoggedIn", "true");
+      localStorage.setItem("baseCurrency", users[email].baseCurrency);
+
+      // Load user's mainBalance and transactions into localStorage for dashboard
+      let accounts = JSON.parse(localStorage.getItem("accounts")) || {};
+      if (accounts[email]) {
+        localStorage.setItem("mainBalance", accounts[email].mainBalance);
+        localStorage.setItem("transactions", JSON.stringify(accounts[email].transactions));
+      } else {
+        localStorage.setItem("mainBalance", "0");
+        localStorage.setItem("transactions", JSON.stringify([]));
+      }
+
+      window.location.href = "dashboard.html";
+    }
+    </script>
+</body>

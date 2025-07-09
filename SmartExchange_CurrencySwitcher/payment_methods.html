@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Payment Methods - SmartExchange</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+  </style>
+</head>
+<body onload="checkAuth();">
+  <div class="container">
+    <h1>Payment Methods</h1>
+    <p>Please choose an option:</p>
+    <button onclick="window.location.href='withdraw.html'">Withdraw</button>
+    <button onclick="window.location.href='transfer.html'">Transfer</button>
+    <button onclick="window.location.href='dashboard.html'">Back to Dashboard</button>
+  </div>
+
+  <script>
+    function checkAuth() {
+      if (localStorage.getItem("userLoggedIn") !== "true") {
+        window.location.href = "login.html";
+      }
+    }
+  </script>
+</body>
+</html>

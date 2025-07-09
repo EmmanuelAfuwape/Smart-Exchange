@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Deposit - SmartExchange</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Deposit Funds</h1>
+    <form id="deposit-form">
+      <label for="details">Deposit though card</label>
+      <label for="deposit-amount">Deposit Amount (USD):</label><br />
+      <input type="number" id="deposit-amount" name="deposit-amount" min="0.01" step="0.01" required /><br />
+
+      <label for="card-number">Card Number:</label><br />
+<input type="text" id="card-number" name="card-number" maxlength="19" placeholder="1234 5678 9012 3456" required oninput="formatCardNumber(this)" /><br />
+
+      <label for="expiry-date">Expiration Date (MM/YY):</label><br />
+<input type="text" id="expiry-date" name="expiry-date" maxlength="5" placeholder="MM/YY" required oninput="formatExpiryDate(this)" /><br />
+
+      <label for="cvv">CVV:</label><br />
+<input type="text" id="cvv" name="cvv" maxlength="4" placeholder="123" required /><br />
+
+      <button type="submit">Deposit</button>
+    </form>
+    <h3>OR you could through transfer</h3>
+    <button onclick="window.location.href='transfer_online.html'">Transfer Online</button><br>
+    <br>
+    <button onclick="goBack()">Back to Dashboard</button>
+  </br>
+  </div>
+
+  <script>
+    function goBack() {
+      window.location.href = "dashboard.html";
+    }
+
+    function formatCardNumber(input) {
+      let value = input.value.replace(/\D/g, '');
+      let formattedValue = '';
+      for (let i = 0; i < value.length; i++) {
+        if (i > 0 && i % 4 === 0) {
+          formattedValue += ' ';
+        }
+        formattedValue += value[i];
+      }
+      input.value = formattedValue;
+    }
+
+    function formatExpiryDate(input) {
+      let value = input.value.replace(/\D/g, '');
+      if (value.length >= 2) {
+        value = value.substring(0, 2) + '/' + value.substring(2, 4);
+      }
+      input.value = value;
+    }
+
+document.getElementById('deposit-form').addEventListener('submit', function(event) {
+  event.preventDefault();
+
+  console.log("Deposit form submitted");
+
+  const amount = parseFloat(document.getElementById('deposit-amount').value);
+  const cardNumber = document.getElementById('card-number').value.trim();
+  const expiryDate = document.getElementById('expiry-date').value.trim();
+  const cvv = document.getElementById('cvv').value.trim();
+
+  console.log("Amount:", amount, "Card Number:", cardNumber, "Expiry Date:", expiryDate, "CVV:", cvv);
+
+  if (isNaN(amount) || amount <= 0) {
+    alert('Please enter a valid deposit amount greater than 0.');
+    return;
+  }
+
+  // Basic card number validation (digits only, length 13-19)
+  const cardNumberDigits = cardNumber.replace(/\s+/g, '');
+  if (!/^\d{13,19}$/.test(cardNumberDigits)) {
+    alert('Please enter a valid card number (13 to 19 digits).');
+    return;
+  }
+
+  // Expiry date validation MM/YY
+  if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(expiryDate)) {
+    alert('Please enter a valid expiration date in MM/YY format.');
+    return;
+  }
+
+  // CVV validation (3 or 4 digits)
+  if (!/^\d{3,4}$/.test(cvv)) {
+    alert('Please enter a valid CVV (3 or 4 digits).');
+    return;
+  }
+
+  // Update balance in localStorage
+  let currentBalance = localStorage.getItem('mainBalance') ? parseFloat(localStorage.getItem('mainBalance')) : 0;
+
+  // Convert deposit amount from local currency to base currency
+  const baseCurrency = localStorage.getItem('baseCurrency') || 'USD';
+  const exchangeRates = JSON.parse(localStorage.getItem('exchangeRates')) || {};
+  const userCurrency = baseCurrency; // Assuming deposit amount is entered in base currency for simplicity
+
+  // For now, treat deposit amount as base currency amount
+  currentBalance += amount;
+  localStorage.setItem('mainBalance', currentBalance.toFixed(2));
+
+  // Save deposit transaction
+  const now = new Date();
+  let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+  transactions.push({
+    date: now.toLocaleDateString() + " " + now.toLocaleTimeString(),
+    description: "Deposit made",
+    amount: amount
+  });
+  localStorage.setItem('transactions', JSON.stringify(transactions));
+
+  alert('Deposit of $' + amount.toFixed(2) + ' successful!');
+  document.getElementById('deposit-form').reset();
+  window.location.href = "dashboard.html";
+});
+  </script>
+</body>
+</html>

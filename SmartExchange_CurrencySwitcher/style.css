@@ -1,0 +1,223 @@
+:root {
+  --background-color: #ffffff;
+  --text-color: #1f1c2c;
+  --container-bg: rgba(255, 255, 255, 0.15);
+  --container-border: rgba(255, 255, 255, 0.3);
+  --container-shadow: rgba(0, 0, 0, 0.5);
+  --button-bg: #000;
+  --button-hover-bg: #484848;
+  --button-text-color: #ffffff;
+  --top-bar-bg: rgba(255, 255, 255, 0.85);
+  --top-bar-text-color: #222;
+}
+
+[data-theme="dark"] {
+  --background-color: #1f1c2c;
+  --text-color: #ffffff;
+  --container-bg: rgba(18, 18, 18, 0.6);
+  --container-border: rgba(255, 255, 255, 0.1);
+  --container-shadow: rgba(0, 0, 0, 0.7);
+  --button-bg: #333;
+  --button-hover-bg: #555;
+  --button-text-color: #ffffff;
+  --top-bar-bg: rgba(18, 18, 18, 0.85);
+  --top-bar-text-color: #eee;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-image: url('3159248.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  color: var(--text-color);
+  margin: 0;
+  padding: 20px;
+  min-height: 100vh;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+  line-height: 1.6;
+  overflow-x: hidden;
+  background-color: var(--background-color);
+}
+
+.container {
+  background: var(--container-bg);
+  padding: 40px 50px;
+  border-radius: 20px;
+  box-shadow: 0 8px 48px 0 var(--container-shadow);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--container-border);
+  width: 650px;
+  max-width: 90%;
+  text-align: center;
+  color: var(--text-color);
+  flex-grow: 1;
+}
+
+button {
+  background: var(--button-bg);
+  border: none;
+  color: var(--button-text-color);
+  padding: 12px 25px;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  font-weight: 600;
+  box-shadow: 0 4px 8px rgba(103, 103, 103, 0.3);
+  transition: background 0.3s ease;
+}
+
+button:hover {
+  background: var(--button-hover-bg);
+  box-shadow: 0 6px 12px rgba(57, 57, 57, 0.5);
+}
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--top-bar-bg);
+  padding: 10px 20px;
+  border-radius: 0 0 15px 15px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  width: 100%;
+  margin: 0 0 20px 0;
+  color: var(--top-bar-text-color);
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.top-bar-left {
+  flex: 1;
+}
+
+.logo-placeholder {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.top-bar-right {
+  display: flex;
+  gap: 15px;
+}
+
+.top-bar-right button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--top-bar-text-color);
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+tr:nth-child(even) {
+  background: #fafafa;
+}
+
+tr:hover {
+  background: #f0f8ff;
+  cursor: pointer;
+}
+
+#transaction-container {
+  max-height: 300px;
+  overflow-y: auto;
+  border: 1px solid #ffffff;
+  margin-top: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  border-radius: 8px;
+}
+
+#transaction-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+#transaction-table th, #transaction-table td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+#transaction-table tr:hover {
+  background-color: #f1f1f1;
+}
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.85);
+  padding: 10px 20px;
+  border-radius: 0 0 15px 15px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  width: 100%;
+  /* Removed max-width and margin to make full width */
+  margin: 0 0 20px 0;
+  color: #222;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.top-bar-left {
+  flex: 1;
+}
+
+.logo-placeholder {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.top-bar-right {
+  display: flex;
+  gap: 15px;
+}
+
+.top-bar-right button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  color: #222;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.top-bar-right button:hover {
+  background-color: rgba(0,0,0,0.1);
+}
+
+/* Added styles for input and select elements */
+input[type="email"],
+input[type="password"],
+input[type="text"],
+input[type="number"],
+select {
+  width: 100%;
+  padding: 12px 15px;
+  margin: 8px 0 16px 0;
+  border: 1.5px solid var(--container-border);
+  border-radius: 8px;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  font-size: 1rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  box-sizing: border-box;
+}
+
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="text"]:focus,
+input[type="number"]:focus,
+select:focus {
+  border-color: var(--button-bg);
+  box-shadow: 0 0 8px var(--button-bg);
+  outline: none;
+}

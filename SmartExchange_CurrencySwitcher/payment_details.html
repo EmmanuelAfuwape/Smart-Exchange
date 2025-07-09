@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Make a Payment - Details</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>Make a Payment - Details</h1>
+  <p>Payment Amount: <span id="displayAmount"></span></p>
+  <form id="paymentDetailsForm">
+    <label for="payerName">Payer Name:</label>
+    <input type="text" id="payerName" name="payerName" required />
+
+    <label for="paymentMethod">Payment Method:</label>
+    <select id="paymentMethod" name="paymentMethod" required>
+      <option value="">Select</option>
+      <option value="credit_card">Credit Card</option>
+      <option value="debit_card">Debit Card</option>
+      <option value="bank_transfer">Bank Transfer</option>
+      <option value="paypal">PayPal</option>
+    </select>
+
+    <button type="submit">Make Payment</button>
+  </form>
+
+  <p><a href="dashboard.html">Back to Dashboard</a></p>
+
+  <script>
+    // Display the payment amount from sessionStorage
+    const amount = sessionStorage.getItem('paymentAmount');
+    if (!amount) {
+      alert('No payment amount found. Redirecting to input page.');
+      window.location.href = 'payment_input.html';
+    } else {
+      document.getElementById('displayAmount').innerText = amount;
+    }
+
+    document.getElementById('paymentDetailsForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      // Here you can add code to send payment data to backend API
+      alert('Payment submitted successfully for amount: ' + amount);
+      // Clear sessionStorage and redirect to dashboard or another page
+      sessionStorage.removeItem('paymentAmount');
+      window.location.href = 'dashboard.html';
+    });
+  </script>
+</body>
+</html>

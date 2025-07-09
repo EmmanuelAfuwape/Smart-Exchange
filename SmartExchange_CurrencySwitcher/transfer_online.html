@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Transfer Online - SmartExchange</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Transfer Online</h1>
+    <form id="transfer-form">
+      <label for="recipient-account">Recipient Bank Name:</label><br />
+      <input type="text" id="recipient-account" name="recipient-account" required placeholder="Enter recipient account number" /><br />
+
+      <label for="recipient-account">Recipient Account Number:</label><br />
+      <input type="text" id="recipient-account" name="recipient-account" required placeholder="Enter recipient account number" /><br />
+
+      <label for="transfer-amount">Amount (USD):</label><br />
+      <input type="number" id="transfer-amount" name="transfer-amount" min="0.01" step="0.01" required /><br />
+
+      <label for="transfer-description">Description:</label><br />
+      <input type="text" id="transfer-description" name="transfer-description" placeholder="Optional description" /><br />
+
+      <button type="submit">Submit Transfer</button>
+    </form>
+    <br />
+    <button onclick="goBack()">Back to Dashboard</button>
+  </div>
+
+  <script>
+    function goBack() {
+      window.location.href = "dashboard.html";
+    }
+
+    document.getElementById('transfer-form').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const recipientAccount = document.getElementById('recipient-account').value.trim();
+      const amount = parseFloat(document.getElementById('transfer-amount').value);
+      const description = document.getElementById('transfer-description').value.trim();
+
+      if (!recipientAccount) {
+        alert('Please enter a recipient account number.');
+        return;
+      }
+
+      if (isNaN(amount) || amount <= 0) {
+        alert('Please enter a valid transfer amount greater than 0.');
+        return;
+      }
+
+      let mainBalance = localStorage.getItem('mainBalance') ? parseFloat(localStorage.getItem('mainBalance')) : 0;
+      if (amount > mainBalance) {
+        alert('Insufficient balance for this transfer.');
+        return;
+      }
+
+      mainBalance -= amount;
+      localStorage.setItem('mainBalance', mainBalance.toFixed(2));
+
+      const now = new Date();
+      let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+      transactions.push({
+        date: now.toLocaleDateString() + " " + now.toLocaleTimeString(),
+        description: `Transfer to ${recipientAccount}` + (description ? `: ${description}` : ''),
+        amount: -amount
+      });
+      localStorage.setItem('transactions', JSON.stringify(transactions));
+
+      alert('Transfer of $' + amount.toFixed(2) + ' successful!');
+      window.location.href = "dashboard.html";
+    });
+  </script>
+</body>
+</html>
